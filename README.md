@@ -15,16 +15,17 @@ Domain - Region object
 Timing - Performance Timing   
 
 ### Command Line Arguments ###
--C [Number of client connections]
--N [Region name]
--R [Numbder of reads to perform in a single cycle
--W [Number of wrtites to perform in a single cycle]
--I [The wait or interval time between cycles in milliseconds]
--K [The region key prefix for each thread]
--S [Size of the object written to the region]
--H [Locator host name or IP addrerss]
--P [Locator port number]
--E [Length of the performance test in minutes]
+
+-C [Number of client connections]  
+-N [Region name]  
+-R [Numbder of reads to perform in a single cycle]  
+-W [Number of wrtites to perform in a single cycle]  
+-I [The wait or interval time between cycles in milliseconds]  
+-K [The region key prefix for each thread]  
+-S [Size of the object written to the region]  
+-H [Locator host name or IP addrerss]  
+-P [Locator port number]  
+-E [Length of the performance test in minutes]  
 
 
 
