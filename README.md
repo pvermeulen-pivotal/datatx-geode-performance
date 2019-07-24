@@ -14,6 +14,20 @@ PerformanceCallable - Performance worker thread
 Domain - Region object  
 Timing - Performance Timing   
 
+### Properties ###
+
+log4j.properties - Performance test log4j logging properties  
+
+### Log4J Property File ###
+
+log4j.rootLogger=INFO, file  
+log4j.appender.file=org.apache.log4j.RollingFileAppender  
+log4j.appender.file.File=logs/performance-test.log  
+log4j.appender.file.MaxFileSize=2000KB  
+log4j.appender.file.MaxBackupIndex=5  
+log4j.appender.file.layout=org.apache.log4j.PatternLayout  
+log4j.appender.file.layout.ConversionPattern=[%t] %-5p %c - %m%n  
+
 ### Command Line Arguments ###
 
 -C [Number of client connections]  
