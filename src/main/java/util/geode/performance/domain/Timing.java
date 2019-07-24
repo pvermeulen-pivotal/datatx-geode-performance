@@ -1,49 +1,76 @@
 package util.geode.performance.domain;
 
 public class Timing {
-	private long readTime = 0;
-	private long readCount = 0;
-	private long writeTime = 0;
-	private long writeCount = 0;
-	
-	public Timing() {}
-	
-	public Timing(long readTime, long readCount, long writeTime, long writeCount) {
-		this.readTime=readTime;
-		this.readCount=readCount;
-		this.writeTime = writeTime;
-		this.writeCount = writeCount;
+	private String keyHeader;
+	private String regionName;
+	private int domainSize;
+	private double readTime = 0;
+	private double readCount = 0;
+	private double writeTime = 0;
+	private double writeCount = 0;
+
+	public Timing() {
 	}
 
-	public long getReadTime() {
+	public Timing(String keyHeader, String regionName, int domainSize) {
+		this.keyHeader = keyHeader;
+		this.regionName = regionName;
+		this.domainSize = domainSize;
+	}
+
+	public String getKeyHeader() {
+		return keyHeader;
+	}
+
+	public void setKeyHeader(String keyHeader) {
+		this.keyHeader = keyHeader;
+	}
+
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+
+	public int getDomainSize() {
+		return domainSize;
+	}
+
+	public void setDomainSize(int domainSize) {
+		this.domainSize = domainSize;
+	}
+
+	public double getReadTime() {
 		return readTime;
 	}
 
-	public void setReadTime(long readTime) {
+	public void setReadTime(double readTime) {
 		this.readTime = readTime;
 	}
 
-	public long getReadCount() {
+	public double getReadCount() {
 		return readCount;
 	}
 
-	public void setReadCount(long readCount) {
+	public void setReadCount(double readCount) {
 		this.readCount = readCount;
 	}
 
-	public long getWriteTime() {
+	public double getWriteTime() {
 		return writeTime;
 	}
 
-	public void setWriteTime(long writeTime) {
+	public void setWriteTime(double writeTime) {
 		this.writeTime = writeTime;
 	}
 
-	public long getWriteCount() {
+	public double getWriteCount() {
 		return writeCount;
 	}
 
-	public void setWriteCount(long writeCount) {
+	public void setWriteCount(double writeCount) {
 		this.writeCount = writeCount;
 	}
 }

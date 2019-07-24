@@ -1,4 +1,7 @@
+.DS_Store
 .classpath
 .project
 .settings
 target/
+src/.DS_Store
+logs/

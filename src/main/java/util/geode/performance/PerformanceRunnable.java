@@ -6,13 +6,13 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 
 import org.apache.geode.cache.Region;
-import org.apache.geode.cache.client.ClientCache;
-import org.apache.geode.cache.client.ClientRegionShortcut;
+import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import util.geode.performance.domain.Domain;
 import util.geode.performance.domain.Timing;
 
-public class PerformanceRunnable implements Callable {
+public class PerformanceRunnable implements Callable<Timing> {
 	private int reads;
 	private int writes;
 	private Region region;
@@ -20,20 +20,21 @@ public class PerformanceRunnable implements Callable {
 	private int runTime;
 	private long waitTime;
 	private String keyHeader;
-	private String regionName;
-	private ClientCache cache;
 	private int lastKey;
+	private Logger LOG;
+//	private org.slf4j.Logger LOG = LoggerFactory.getLogger(Performance.class);
 
-	public PerformanceRunnable(ClientCache cache, int reads, int writes, String keyHeader, String regionName,
-			int domainSize, int runTime, long waitTime) {
-		this.cache = cache;
+
+	public PerformanceRunnable(int reads, int writes, String keyHeader, Region region, int domainSize, int runTime,
+			long waitTime, Logger log) {
 		this.reads = reads;
 		this.writes = writes;
 		this.keyHeader = keyHeader;
-		this.regionName = regionName;
+		this.region = region;
 		this.domainSize = domainSize;
 		this.runTime = runTime;
 		this.waitTime = waitTime;
+		this.LOG = log;
 	}
 
 	private synchronized int getLastKey() {
@@ -51,20 +52,22 @@ public class PerformanceRunnable implements Callable {
 		return lastKey;
 	}
 
-	public Object call() throws Exception {
-		region = cache.createClientRegionFactory(ClientRegionShortcut.PROXY).create(regionName);
+	public Timing call() throws Exception {
 		int size = 100 * reads;
+		LOG.info("Starting region load using keyHeader " + keyHeader + " records to be written = " + size);
 		lastKey = regionLoad(size);
+		LOG.info("Completed region load using keyHeader " + keyHeader );
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		cal.add(Calendar.MINUTE, runTime);
-		Timing timing = new Timing();
+		Timing timing = new Timing(keyHeader, region.getName(), domainSize);
 		Random random = new Random();
-		while (cal.getTime().getTime() < new Date().getTime()) {
+		long duration = new Date().getTime();
+		while (duration < cal.getTime().getTime()) {
 			for (int i = 0; i < reads; i++) {
 				int key = random.nextInt(lastKey);
 				long startTime = System.currentTimeMillis();
-				region.get(keyHeader + String.format("%010d", key));
+				Domain domain = (Domain) region.get(keyHeader + String.format("%010d", key));
 				long endTime = System.currentTimeMillis();
 				timing.setReadTime(timing.getReadTime() + (endTime - startTime));
 				timing.setReadCount(timing.getReadCount() + 1);
@@ -79,11 +82,12 @@ public class PerformanceRunnable implements Callable {
 			}
 			try {
 				Thread.sleep(waitTime);
+				duration = new Date().getTime();
 			} catch (InterruptedException e) {
 				// do nothing
 			}
 		}
+		LOG.info("Thread completed keyHeader=" + keyHeader);
 		return timing;
 	}
-
 }
