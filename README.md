@@ -8,10 +8,10 @@ The Geode Performance project is used to run a performance test on a GemFire clu
 
 
 ### Modules ###
-Performance - Main process module
-PerformanceCallable - Performance worker thread
-Domain - Region object 
-Timing - Performance Timing
+ Performance - Main process module
+ PerformanceCallable - Performance worker thread
+ Domain - Region object 
+ Timing - Performance Timing
 
 ### Command Line Arguments ###
 -C [Number of client connections]
