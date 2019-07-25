@@ -82,10 +82,10 @@ Maven is used to build the project and uses an assembly file to create an archiv
 
 When the archive datatx-geode-performance-1.0.0.-SNAPSHOT-archive.zip is unziped, a directory is created with the name of performance. Under the performance directory, three (3) sub-directories are created.
 
-   performance  
-       conf/  
-       lib/  
-       logs/  
+    performance
+       conf/
+       lib/
+logs/  
       
 #### start_performance.sh ####
 
