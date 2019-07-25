@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -244,6 +245,11 @@ public class Performance {
 		}
 		Performance perf = new Performance();
 		processArgs(args, perf);
+		String logFile = System.getProperty("logfile.name");
+		if (logFile == null || logFile.length() == 0) {
+			UUID.randomUUID().toString();
+			System.setProperty("logfile.name", "logs/performance-" + UUID.randomUUID().toString() + ".log");
+		}
 		perf.setupPerformance();
 	}
 
