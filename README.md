@@ -86,8 +86,7 @@ When the archive datatx-geode-performance-1.0.0.-SNAPSHOT-archive.zip is unziped
        conf/  
        lib/  
        logs/  
-       start_performance.sh  
-       
+      
 #### start_performance.sh ####
 
     #!/bin/bash
