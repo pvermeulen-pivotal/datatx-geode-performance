@@ -12,8 +12,8 @@ Multiple performance tests can be run to simulate multiple clients connection to
 
 ***Example***
 
-    java -cp conf/:lib/* util.geode.performance.Performance -C 100 -N TestPartition -R 10 -W 3 -I 100 -K TestPartitionKey -S 
-    2048 -H 10.76.38.83 -P 10334 -E 5
+    java -cp conf/:lib/* util.geode.performance.Performance -C 100 -N TestPartition -R 10 -W 3 -I 100  
+    -K TestPartitionKey -S 2048 -H 10.76.38.83 -P 10334 -E 5
 
 The example performance test run with 100 (-C) active connections performing 10 (-R) get operations and 3 (-W) put operations in a cycle. After a cycle, the performance test sleeps for 100ms (-I) before starting the next cycle. The performance test writes to the TestPartition (-N) region a domain object with a object size (-S) of 2048. The domain object key is prefixed (-K) TestPartitionKey along with a connection id (0-99) and 10 digit sequence number. The performance test will run for a 5 minute (-E) duration and connects to locator host (-H) and ort (-P).\  
 
