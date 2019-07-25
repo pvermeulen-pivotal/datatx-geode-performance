@@ -38,7 +38,6 @@ public class Performance {
 	private Region region;
 	private HashMap<Integer, Future<Timing>> threadsFuture = new HashMap<Integer, Future<Timing>>();
 	private Logger LOG;
-//	 private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(PerformanceRunnable.class);
 
 	public Performance() {
 	}
@@ -113,7 +112,7 @@ public class Performance {
 					Thread.sleep(1000);
 					outstandingThreads = 0;
 				} catch (InterruptedException e) {
-					// Do nothing
+					// do nothing
 				}
 			} else {
 				complete = true;
@@ -260,6 +259,8 @@ public class Performance {
 		System.out.println("-H Locator Host Name/IP");
 		System.out.println("-P Locator Port");
 		System.out.println("-E Execution/Run Time");
+		System.out.println("");
+		System.out.println("All arguments must be present since no defaults are assumed");
 		System.out.println("");
 	}
 
