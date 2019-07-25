@@ -31,7 +31,7 @@
 			<fileMode>0755</fileMode>
 		</fileSet>
 		<fileSet>
-			<directory>performance/logs/</directory>
+			<directory>logs/</directory>
 			<outputDirectory>performance/logs</outputDirectory>
 			<excludes>
 				<exclude>**/*.log</exclude>
