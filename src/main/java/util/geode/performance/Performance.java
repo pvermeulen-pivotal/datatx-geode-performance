@@ -18,7 +18,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.LoggerFactory;
 
 import util.geode.performance.domain.Timing;
-import util.geode.performance.PerformanceRunnable;
+import util.geode.performance.PerformanceCallable;
 
 public class Performance {
 
@@ -87,7 +87,7 @@ public class Performance {
 	private void submitThreads() {
 		LOG.info("Starting threads");
 		for (int i = 0; i < numberConnections; i++) {
-			PerformanceRunnable pr = new PerformanceRunnable(reads, writes, keyHeader + String.valueOf(i) + "-", region,
+			PerformanceCallable pr = new PerformanceCallable(reads, writes, keyHeader + String.valueOf(i) + "-", region,
 					domainSize, runTime, waitTime, LOG);
 			LOG.info("Starting thread: reads=" + reads + " writes=" + writes + " keyheader=" + keyHeader
 					+ String.valueOf(i) + " region=" + regionName + " domainsize=" + domainSize + " runtime=" + runTime

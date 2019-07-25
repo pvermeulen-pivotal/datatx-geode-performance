@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import util.geode.performance.domain.Domain;
 import util.geode.performance.domain.Timing;
 
-public class PerformanceRunnable implements Callable<Timing> {
+public class PerformanceCallable implements Callable<Timing> {
 	private int reads;
 	private int writes;
 	private Region region;
@@ -22,10 +22,8 @@ public class PerformanceRunnable implements Callable<Timing> {
 	private String keyHeader;
 	private int lastKey;
 	private Logger LOG;
-//	private org.slf4j.Logger LOG = LoggerFactory.getLogger(Performance.class);
 
-
-	public PerformanceRunnable(int reads, int writes, String keyHeader, Region region, int domainSize, int runTime,
+	public PerformanceCallable(int reads, int writes, String keyHeader, Region region, int domainSize, int runTime,
 			long waitTime, Logger log) {
 		this.reads = reads;
 		this.writes = writes;

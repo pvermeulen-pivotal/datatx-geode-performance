@@ -20,6 +20,24 @@
      <target>1.8</target>
     </configuration>
    </plugin>
+   <plugin>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <version>2.3</version>
+    <executions>
+     <execution>
+      <id>make-assembly</id>
+      <phase>package</phase>
+      <goals>
+       <goal>single</goal>
+      </goals>
+      <configuration>
+       <descriptors>
+        <descriptor>assembly.xml</descriptor>
+       </descriptors>
+      </configuration>
+     </execution>
+    </executions>
+   </plugin>
   </plugins>
  </build>
 
@@ -40,16 +58,16 @@
    <version>3.8.1</version>
    <scope>test</scope>
   </dependency>
-  <dependency>
-   <groupId>javax.xml.bind</groupId>
-   <artifactId>jaxb-api</artifactId>
-   <version>2.2.5</version>
-  </dependency>
-  <dependency>
-   <groupId>com.sun.xml.bind</groupId>
-   <artifactId>jaxb-impl</artifactId>
-   <version>2.2.4</version>
-  </dependency>
+<!--   <dependency> -->
+<!--    <groupId>javax.xml.bind</groupId> -->
+<!--    <artifactId>jaxb-api</artifactId> -->
+<!--    <version>2.2.5</version> -->
+<!--   </dependency> -->
+<!--   <dependency> -->
+<!--    <groupId>com.sun.xml.bind</groupId> -->
+<!--    <artifactId>jaxb-impl</artifactId> -->
+<!--    <version>2.2.4</version> -->
+<!--   </dependency> -->
   <dependency>
    <groupId>org.apache.commons</groupId>
    <artifactId>commons-lang3</artifactId>
