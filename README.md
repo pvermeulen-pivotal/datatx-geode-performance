@@ -32,7 +32,7 @@ log4j.properties - Performance test log4j logging properties
 
 log4j.rootLogger=INFO, file  
 log4j.appender.file=org.apache.log4j.RollingFileAppender  
-log4j.appender.file.File=logs/performance-test.log  
+log4j.appender.file.File=${logfile.name}  
 log4j.appender.file.MaxFileSize=2000KB  
 log4j.appender.file.MaxBackupIndex=5  
 log4j.appender.file.layout=org.apache.log4j.PatternLayout  
@@ -53,10 +53,11 @@ log4j.appender.file.layout.ConversionPattern=[%t] %-5p %c - %m%n
 
 ### Output ###
 
-The performance test generates two (2) log files. 
+The performance test generates two (2) log files. If the performance log file name and path is not overriden by  
+the java property -Dlogfile.name=logs/performance.log  The performance log file created will be performance-{UUID}.log.
 
 performance-gemfire.log - GemFire client log  
-performance.log - Performance log and report  
+performance-{UUID}.log - Performance log and report  
 
 #### Performance Log ####
 
