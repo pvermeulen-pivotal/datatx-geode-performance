@@ -7,7 +7,6 @@ import java.util.concurrent.Callable;
 
 import org.apache.geode.cache.Region;
 import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import util.geode.performance.domain.Domain;
 import util.geode.performance.domain.Timing;

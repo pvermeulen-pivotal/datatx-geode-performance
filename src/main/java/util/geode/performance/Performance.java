@@ -134,7 +134,8 @@ public class Performance {
 				totTiming.setWriteTime(totTiming.getWriteTime() + timing.getWriteTime());
 				LOG.info("");
 				LOG.info("Performance Timing Region=" + timing.getRegionName() + " KeyHeader=" + timing.getKeyHeader()
-						+ " DomainSize=" + domainSize + " ReadRate:" + reads + " WriteRate:" + writes);
+						+ " DomainSize=" + domainSize + " ReadRate:" + reads + " WriteRate:" + writes
+						+ " DomainObjectSize=" + domainSize + " TestDuration:" + runTime + " secs");
 				LOG.info("     ReadCount=" + timing.getReadCount() + " AverageReadTime="
 						+ timing.getReadTime() / timing.getReadCount() + "ms TotalReadTime=" + timing.getReadTime()
 						+ "ms");
@@ -147,9 +148,8 @@ public class Performance {
 				totTiming.setIopsWrite(totTiming.getIopsWrite() + (timing.getWriteCount() / (timing.getWriteTime() / 1000)));
 				double ioread = (timing.getReadCount() / (timing.getReadTime() / 1000));
 				double iowrite = (timing.getWriteCount() / (timing.getWriteTime() / 1000));
-				double iops = ioread + iowrite;
-				LOG.info("     Total IOPS=" + iops);
-				totTiming.setIopsTotal(iops);
+				LOG.info("     Total IOPS=" + (ioread + iowrite));
+				totTiming.setIopsTotal(totTiming.getIopsTotal() + (ioread + iowrite));
 			} catch (Exception e) {
 				LOG.error("Error printing results exception: " + e.getMessage());
 			}
