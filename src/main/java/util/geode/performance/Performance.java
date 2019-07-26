@@ -135,7 +135,7 @@ public class Performance {
 				LOG.info("");
 				LOG.info("Performance Timing Region=" + timing.getRegionName() + " KeyHeader=" + timing.getKeyHeader()
 						+ " DomainSize=" + domainSize + " ReadRate:" + reads + " WriteRate:" + writes
-						+ " DomainObjectSize=" + domainSize + " TestDuration:" + runTime + " secs");
+						+ " TestDuration:" + runTime + " secs");
 				LOG.info("     ReadCount=" + timing.getReadCount() + " AverageReadTime="
 						+ timing.getReadTime() / timing.getReadCount() + "ms TotalReadTime=" + timing.getReadTime()
 						+ "ms");
