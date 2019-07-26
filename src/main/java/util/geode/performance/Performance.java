@@ -1,10 +1,11 @@
 package util.geode.performance;
 
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -16,7 +17,6 @@ import org.apache.geode.cache.client.ClientRegionShortcut;
 import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.slf4j.LoggerFactory;
 
 import util.geode.performance.domain.Timing;
 import util.geode.performance.PerformanceCallable;
@@ -140,6 +140,15 @@ public class Performance {
 				LOG.info("     WriteCount=" + timing.getWriteCount() + " AverageWriteTime="
 						+ timing.getWriteTime() / timing.getWriteCount() + "ms TotalWriteTime=" + timing.getWriteTime()
 						+ "ms");
+				LOG.info("     Read IOPS=" + (timing.getReadCount() / (timing.getReadTime() / 1000)));
+				totTiming.setIopsRead(totTiming.getIopsRead() + (timing.getReadCount() / (timing.getReadTime() / 1000)));
+				LOG.info("     Write IOPS=" + (timing.getWriteCount() / (timing.getWriteTime() / 1000)));
+				totTiming.setIopsWrite(totTiming.getIopsWrite() + (timing.getWriteCount() / (timing.getWriteTime() / 1000)));
+				double ioread = (timing.getReadCount() / (timing.getReadTime() / 1000));
+				double iowrite = (timing.getWriteCount() / (timing.getWriteTime() / 1000));
+				double iops = ioread + iowrite;
+				LOG.info("     Total IOPS=" + iops);
+				totTiming.setIopsTotal(iops);
 			} catch (Exception e) {
 				LOG.error("Error printing results exception: " + e.getMessage());
 			}
@@ -156,6 +165,9 @@ public class Performance {
 		LOG.info("     WriteCount=" + totTiming.getWriteCount() + " AverageWriteTime="
 				+ totTiming.getWriteTime() / totTiming.getWriteCount() + "ms TotalWriteTime=" + totTiming.getWriteTime()
 				+ "ms");
+		LOG.info("     Total Read IOPS=" + totTiming.getIopsRead());
+		LOG.info("     Total Write IOPS=" + totTiming.getIopsWrite());
+		LOG.info("     Total IOPS=" + (totTiming.getIopsRead() + totTiming.getIopsWrite()));
 	}
 
 	public int getNumberConnections() {
@@ -247,8 +259,8 @@ public class Performance {
 		processArgs(args, perf);
 		String logFile = System.getProperty("logfile.name");
 		if (logFile == null || logFile.length() == 0) {
-			UUID.randomUUID().toString();
-			System.setProperty("logfile.name", "logs/performance-" + UUID.randomUUID().toString() + ".log");
+			DateFormat df = new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss");
+			System.setProperty("logfile.name", "logs/performance-" + df.format(new Date()) + ".log");
 		}
 		perf.setupPerformance();
 	}
@@ -305,3 +317,4 @@ public class Performance {
 		}
 	}
 }
+

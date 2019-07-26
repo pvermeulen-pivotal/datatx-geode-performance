@@ -8,6 +8,9 @@ public class Timing {
 	private double readCount = 0;
 	private double writeTime = 0;
 	private double writeCount = 0;
+	private double iopsRead = 0;
+	private double iopsWrite = 0;
+	private double iopsTotal = 0;
 
 	public Timing() {
 	}
@@ -73,4 +76,29 @@ public class Timing {
 	public void setWriteCount(double writeCount) {
 		this.writeCount = writeCount;
 	}
+
+	public double getIopsRead() {
+		return iopsRead;
+	}
+
+	public void setIopsRead(double iopsRead) {
+		this.iopsRead = iopsRead;
+	}
+
+	public double getIopsWrite() {
+		return iopsWrite;
+	}
+
+	public void setIopsWrite(double iopsWrite) {
+		this.iopsWrite = iopsWrite;
+	}
+
+	public double getIopsTotal() {
+		return iopsTotal;
+	}
+
+	public void setIopsTotal(double iopsTotal) {
+		this.iopsTotal = iopsTotal;
+	}
+
 }

@@ -34,4 +34,8 @@ public class Domain {
 			return body;
 		}
 	}
+
+	public int getBodySize() {
+		return bodySize;
+	}
 }

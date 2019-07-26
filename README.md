@@ -53,11 +53,11 @@ log4j.appender.file.layout.ConversionPattern=[%t] %-5p %c - %m%n
 
 ### Output ###
 
-The performance test generates two (2) log files. If the performance log file name and path is not overriden by  
-the java property -Dlogfile.name=logs/performance.log  The performance log file created will be performance-{UUID}.log.
+The performance test generates two (2) log files. If the performance log file name and path is not overridden by  
+the java property -Dlogfile.name=logs/performance.log  The performance log file created will be performance-{MM-dd-yyyy_HH:mm:ss}.log.
 
 performance-gemfire.log - GemFire client log  
-performance-{UUID}.log - Performance log and report  
+performance-{MM-dd-yyyy_HH:mm:ss}.log - Performance log and report  
 
 #### Performance Log ####
 
