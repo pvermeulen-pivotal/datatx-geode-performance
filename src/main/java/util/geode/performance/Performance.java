@@ -1,5 +1,6 @@
 package util.geode.performance;
 
+import java.io.File;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -259,8 +260,9 @@ public class Performance {
 		processArgs(args, perf);
 		String logFile = System.getProperty("logfile.name");
 		if (logFile == null || logFile.length() == 0) {
-			DateFormat df = new SimpleDateFormat("MM-dd-yyyy_HH:mm:ss");
-			System.setProperty("logfile.name", "logs/performance-" + df.format(new Date()) + ".log");
+			String dir = System.getProperty("user.dir");
+			DateFormat df = new SimpleDateFormat("MM-dd-yyyy_HH-mm-ss");
+			System.setProperty("logfile.name", dir + File.separator + "logs/performance-" + df.format(new Date()) + ".log");
 		}
 		perf.setupPerformance();
 	}
