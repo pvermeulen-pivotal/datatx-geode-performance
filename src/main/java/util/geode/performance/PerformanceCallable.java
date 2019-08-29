@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import util.geode.performance.domain.Domain;
 import util.geode.performance.domain.Timing;
 
+@SuppressWarnings("rawtypes")
 public class PerformanceCallable implements Callable<Timing> {
 	private int reads;
 	private int writes;
@@ -50,7 +51,7 @@ public class PerformanceCallable implements Callable<Timing> {
 	}
 
 	public Timing call() throws Exception {
-		int size = 100 * reads;
+		int size = reads + (reads / 2);
 		LOG.info("Starting region load using keyHeader " + keyHeader + " records to be written = " + size);
 		lastKey = regionLoad(size);
 		LOG.info("Completed region load using keyHeader " + keyHeader );
@@ -60,22 +61,34 @@ public class PerformanceCallable implements Callable<Timing> {
 		Timing timing = new Timing(keyHeader, region.getName(), domainSize);
 		Random random = new Random();
 		long duration = new Date().getTime();
+		Domain domain; 
+		LOG.info("Executing performance test");
 		while (duration < cal.getTime().getTime()) {
 			for (int i = 0; i < reads; i++) {
+				try {
 				int key = random.nextInt(lastKey);
 				long startTime = System.currentTimeMillis();
-				Domain domain = (Domain) region.get(keyHeader + String.format("%010d", key));
+				domain = (Domain) region.get(keyHeader + String.format("%010d", key));
 				long endTime = System.currentTimeMillis();
 				timing.setReadTime(timing.getReadTime() + (endTime - startTime));
 				timing.setReadCount(timing.getReadCount() + 1);
+				domain = null;
+				} catch (Exception e) {
+					LOG.error("Error performing region get operation - exception: " + e.getMessage() );
+				}
 			}
 			for (int i = 0; i < writes; i++) {
-				Domain domain = new Domain(keyHeader, getLastKey(), domainSize);
+				try {
+				domain = new Domain(keyHeader, getLastKey(), domainSize);
 				long startTime = System.currentTimeMillis();
 				region.put(keyHeader + String.format("%010d", lastKey), domain);
 				long endTime = System.currentTimeMillis();
 				timing.setWriteTime(timing.getWriteTime() + (endTime - startTime));
 				timing.setWriteCount(timing.getWriteCount() + 1);
+				domain = null;
+				} catch (Exception e) {
+					LOG.error("Error performing region write operation - exception: " + e.getMessage() );
+				}
 			}
 			try {
 				Thread.sleep(waitTime);

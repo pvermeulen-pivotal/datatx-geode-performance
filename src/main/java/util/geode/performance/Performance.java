@@ -22,6 +22,7 @@ import org.apache.log4j.PropertyConfigurator;
 import util.geode.performance.domain.Timing;
 import util.geode.performance.PerformanceCallable;
 
+@SuppressWarnings("rawtypes")
 public class Performance {
 
 	private int numberConnections;
@@ -68,10 +69,10 @@ public class Performance {
 	public void setupPerformance() {
 		createLogAppender();
 		LOG.info("Setting up performance run " + new Date());
-		executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(this.numberConnections);
+		executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(numberConnections);
 		cache = new ClientCacheFactory().addPoolLocator(locatorHost, locatorPort)
 				.setPoolMaxConnections(numberConnections).setPoolMinConnections(1).setPoolRetryAttempts(-1)
-				.setPoolPRSingleHopEnabled(true)
+				.setPoolPRSingleHopEnabled(true).setPoolReadTimeout(15000)
 				.setPdxSerializer(new ReflectionBasedAutoSerializer("util.geode.performance.domain.Domain"))
 				.set("log-level", "CONFIG").set("log-file", "logs/performance-gemfire.log").create();
 		region = cache.createClientRegionFactory(ClientRegionShortcut.PROXY).create(regionName);
@@ -111,7 +112,7 @@ public class Performance {
 			}
 			if (outstandingThreads > 0) {
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(5000);
 					outstandingThreads = 0;
 				} catch (InterruptedException e) {
 					// do nothing
@@ -125,17 +126,19 @@ public class Performance {
 	private Timing printResults(Timing totTiming) {
 		Set<Integer> keys = threadsFuture.keySet();
 		for (Integer key : keys) {
-			Future<Timing> f = threadsFuture.get(key);
 			try {
+				Future<Timing> f = threadsFuture.get(key);
 				Timing timing = f.get();
+				if (timing == null)
+					break;
 				totTiming.setReadCount(totTiming.getReadCount() + timing.getReadCount());
 				totTiming.setReadTime(totTiming.getReadTime() + timing.getReadTime());
 				totTiming.setWriteCount(totTiming.getWriteCount() + timing.getWriteCount());
 				totTiming.setWriteTime(totTiming.getWriteTime() + timing.getWriteTime());
 				LOG.info("");
 				LOG.info("Performance Timing Region=" + timing.getRegionName() + " KeyHeader=" + timing.getKeyHeader()
-						+ " DomainSize=" + domainSize + " ReadRate:" + reads + " WriteRate:" + writes
-						+ " TestDuration:" + runTime + " secs");
+						+ " DomainSize=" + domainSize + " ReadRate:" + reads + " WriteRate:" + writes + " TestDuration:"
+						+ runTime + " secs");
 				LOG.info("     ReadCount=" + timing.getReadCount() + " AverageReadTime="
 						+ timing.getReadTime() / timing.getReadCount() + "ms TotalReadTime=" + timing.getReadTime()
 						+ "ms");
@@ -143,15 +146,17 @@ public class Performance {
 						+ timing.getWriteTime() / timing.getWriteCount() + "ms TotalWriteTime=" + timing.getWriteTime()
 						+ "ms");
 				LOG.info("     Read IOPS=" + (timing.getReadCount() / (timing.getReadTime() / 1000)));
-				totTiming.setIopsRead(totTiming.getIopsRead() + (timing.getReadCount() / (timing.getReadTime() / 1000)));
+				totTiming
+						.setIopsRead(totTiming.getIopsRead() + (timing.getReadCount() / (timing.getReadTime() / 1000)));
 				LOG.info("     Write IOPS=" + (timing.getWriteCount() / (timing.getWriteTime() / 1000)));
-				totTiming.setIopsWrite(totTiming.getIopsWrite() + (timing.getWriteCount() / (timing.getWriteTime() / 1000)));
+				totTiming.setIopsWrite(
+						totTiming.getIopsWrite() + (timing.getWriteCount() / (timing.getWriteTime() / 1000)));
 				double ioread = (timing.getReadCount() / (timing.getReadTime() / 1000));
 				double iowrite = (timing.getWriteCount() / (timing.getWriteTime() / 1000));
 				LOG.info("     Total IOPS=" + (ioread + iowrite));
 				totTiming.setIopsTotal(totTiming.getIopsTotal() + (ioread + iowrite));
 			} catch (Exception e) {
-				LOG.error("Error printing results exception: " + e.getMessage());
+				LOG.error("Error printing results for key " + key + " exception: " + e.getMessage());
 			}
 		}
 		return totTiming;
@@ -258,11 +263,12 @@ public class Performance {
 		}
 		Performance perf = new Performance();
 		processArgs(args, perf);
-		String logFile = System.getProperty("logfile.name");
+		String logFile = System.getProperty("logfile-name");
 		if (logFile == null || logFile.length() == 0) {
 			String dir = System.getProperty("user.dir");
 			DateFormat df = new SimpleDateFormat("MM-dd-yyyy_HH-mm-ss");
-			System.setProperty("logfile.name", dir + File.separator + "logs/performance-" + df.format(new Date()) + ".log");
+			System.setProperty("logfile-name",
+					dir + File.separator + "logs/performance-" + df.format(new Date()) + ".log");
 		}
 		perf.setupPerformance();
 	}
@@ -319,4 +325,3 @@ public class Performance {
 		}
 	}
 }
-
