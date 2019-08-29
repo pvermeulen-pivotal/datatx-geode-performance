@@ -20,6 +20,7 @@
 			<outputDirectory>performance</outputDirectory>
 			<includes>
 				<include>**/*.sh</include>
+				<include>**/*.cmd</include>
 			</includes>
 			<directoryMode>0755</directoryMode>
 			<fileMode>0755</fileMode>

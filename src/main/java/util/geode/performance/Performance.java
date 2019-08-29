@@ -68,10 +68,11 @@ public class Performance {
 
 	public void setupPerformance() {
 		createLogAppender();
-		LOG.info("Setting up performance run " + new Date());
+		Date startDate = new Date();
+		LOG.info("Setting up performance run " + startDate);
 		executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(numberConnections);
 		cache = new ClientCacheFactory().addPoolLocator(locatorHost, locatorPort)
-				.setPoolMaxConnections(numberConnections).setPoolMinConnections(1).setPoolRetryAttempts(-1)
+				.setPoolMaxConnections(-1).setPoolMinConnections(1).setPoolRetryAttempts(-1)
 				.setPoolPRSingleHopEnabled(true).setPoolReadTimeout(15000)
 				.setPdxSerializer(new ReflectionBasedAutoSerializer("util.geode.performance.domain.Domain"))
 				.set("log-level", "CONFIG").set("log-file", "logs/performance-gemfire.log").create();
@@ -83,7 +84,9 @@ public class Performance {
 		totTiming = printResults(totTiming);
 		printTotalResults(totTiming);
 		executor.shutdown();
-		LOG.info("Performance run complete " + new Date());
+		Date stopDate = new Date();
+		long runTime = (((stopDate.getTime() - startDate.getTime()) / 1000) / 60);
+		LOG.info("Performance run complete " + new Date() + " test duration (mins): " + runTime);
 	}
 
 	private void submitThreads() {

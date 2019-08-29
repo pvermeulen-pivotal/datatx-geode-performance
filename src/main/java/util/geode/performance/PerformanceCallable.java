@@ -43,8 +43,7 @@ public class PerformanceCallable implements Callable<Timing> {
 	private int regionLoad(int size) {
 		int lastKey = 0;
 		while (lastKey != size) {
-			Domain domain = new Domain(keyHeader, lastKey, domainSize);
-			region.put(keyHeader + String.format("%010d", lastKey), domain);
+			region.put(keyHeader + String.format("%010d", lastKey), new Domain(keyHeader, lastKey, domainSize));
 			lastKey++;
 		}
 		return lastKey;
@@ -54,40 +53,40 @@ public class PerformanceCallable implements Callable<Timing> {
 		int size = reads + (reads / 2);
 		LOG.info("Starting region load using keyHeader " + keyHeader + " records to be written = " + size);
 		lastKey = regionLoad(size);
-		LOG.info("Completed region load using keyHeader " + keyHeader );
+		LOG.info("Completed region load using keyHeader " + keyHeader);
+		Timing timing = new Timing(keyHeader, region.getName(), domainSize);
+		Random random = new Random();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		cal.add(Calendar.MINUTE, runTime);
-		Timing timing = new Timing(keyHeader, region.getName(), domainSize);
-		Random random = new Random();
 		long duration = new Date().getTime();
-		Domain domain; 
+		Domain domain;
 		LOG.info("Executing performance test");
 		while (duration < cal.getTime().getTime()) {
 			for (int i = 0; i < reads; i++) {
 				try {
-				int key = random.nextInt(lastKey);
-				long startTime = System.currentTimeMillis();
-				domain = (Domain) region.get(keyHeader + String.format("%010d", key));
-				long endTime = System.currentTimeMillis();
-				timing.setReadTime(timing.getReadTime() + (endTime - startTime));
-				timing.setReadCount(timing.getReadCount() + 1);
-				domain = null;
+					int key = random.nextInt(lastKey);
+					long startTime = System.currentTimeMillis();
+					domain = (Domain) region.get(keyHeader + String.format("%010d", key));
+					long endTime = System.currentTimeMillis();
+					timing.setReadTime(timing.getReadTime() + (endTime - startTime));
+					timing.setReadCount(timing.getReadCount() + 1);
+					domain = null;
 				} catch (Exception e) {
-					LOG.error("Error performing region get operation - exception: " + e.getMessage() );
+					LOG.error("Error performing region get operation - exception: " + e.getMessage());
 				}
 			}
 			for (int i = 0; i < writes; i++) {
 				try {
-				domain = new Domain(keyHeader, getLastKey(), domainSize);
-				long startTime = System.currentTimeMillis();
-				region.put(keyHeader + String.format("%010d", lastKey), domain);
-				long endTime = System.currentTimeMillis();
-				timing.setWriteTime(timing.getWriteTime() + (endTime - startTime));
-				timing.setWriteCount(timing.getWriteCount() + 1);
-				domain = null;
+					domain = new Domain(keyHeader, getLastKey(), domainSize);
+					long startTime = System.currentTimeMillis();
+					region.put(keyHeader + String.format("%010d", lastKey), domain);
+					long endTime = System.currentTimeMillis();
+					timing.setWriteTime(timing.getWriteTime() + (endTime - startTime));
+					timing.setWriteCount(timing.getWriteCount() + 1);
+					domain = null;
 				} catch (Exception e) {
-					LOG.error("Error performing region write operation - exception: " + e.getMessage() );
+					LOG.error("Error performing region write operation - exception: " + e.getMessage());
 				}
 			}
 			try {
