@@ -99,4 +99,8 @@ When the archive datatx-geode-performance-1.0.0.-SNAPSHOT-package.zip is unziped
 #### start_performance.sh ####
 
     #!/bin/bash
-    java -cp ./conf/:./lib/* util.geode.performance.Performance -Dlogfile-name=logs/performance.log $*
+    java -cp ./conf/:./lib/* util.geode.performance.Performance $*   
+    
+    **Example**    
+    java -cp ./conf/:./lib/* util.geode.performance.Performance -C 20 -N testpartition -R 1000 -W 100 -I 5 -K G/COL/ -S 304800 -H RCPLT001 -P 10334 -E 5
+    
